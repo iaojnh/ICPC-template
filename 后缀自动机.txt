@@ -1,0 +1,73 @@
+const int N=100005;
+struct Node {
+    static const int M = 27;
+    int mxl;
+    Node *pre, *go[M];
+    int val;
+    void clear(int x) {
+        mxl = 0, pre = 0;
+        memset(go, 0, sizeof(go));
+        val=x;
+    }
+}*root, *last, *cur, pool[N << 1],*now;
+void init() {
+    cur = pool;
+    root = last = cur++;
+    root->clear(-1);
+}
+void insert(int x,int pos) {
+    Node *p = last, *np = cur++;
+    np->clear(pos);
+    np->mxl = p->mxl + 1;
+    while (p && !p->go[x])
+        p->go[x] = np, p = p->pre;
+    if (!p) {
+        np->pre = root;
+    } else {
+        Node *q = p->go[x];
+        if (q->mxl == p->mxl + 1) {
+            np->pre = q;
+        } else {
+            Node *nq = cur++;
+            nq->clear(q->val);
+            nq->pre = q->pre, nq->mxl = p->mxl + 1;
+            memcpy(nq->go, q->go, sizeof(nq->go));
+            np->pre = q->pre = nq;
+            while (p && p->go[x] == q)
+                p->go[x] = nq, p = p->pre;
+        }
+    }
+    last = np;
+}
+char str[N];
+int main()//2015 ∫œ∑ GÃ‚ 
+{
+    int T;
+    scanf("%d",&T);
+    rep(cas,0,T)
+    {
+        printf("Case #%d:\n",cas+1);
+        init();
+        scanf("%s",str);
+        int p=0,n=strlen(str);
+        while(p!=n)
+        {
+            now=root;
+            int dis=0;
+            while(p<n&&now->go[str[p]-'a']!=0)
+            {
+                now=now->go[str[p]-'a'];
+                dis++;
+                insert(str[p]-'a',p);
+                p++;
+            }
+            if(dis==0)
+            {
+                insert(str[p]-'a',p);
+                printf("-1 %d\n",str[p++]);
+            }
+            else printf("%d %d\n",dis,now->val-dis+1);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,54 @@
+const int N=50005;
+int data[N];
+long long tree[N<<2],lazy[N<<2];
+void buildtree(int l,int r,int node)
+{
+    if(l==r)tree[node]=data[l];
+    else
+    {
+        int mid=(l+r)>>1;
+        buildtree(l,mid,node<<1);
+        buildtree(mid+1,r,node<<1|1);
+        tree[node]=tree[node<<1]+tree[node<<1|1];
+    }
+}
+void pushdown(int l,int r,int node)
+{
+    if(lazy[node])
+    {
+        lazy[node<<1]+=lazy[node];
+        lazy[node<<1|1]+=lazy[node];
+        int mid=(l+r)>>1;
+        tree[node<<1]+=lazy[node]*(mid-l+1);
+        tree[node<<1|1]+=lazy[node]*(r-mid);
+        lazy[node]=0;
+    }
+}
+void update(int l,int r,int node,int _l,int _r,ll num)
+{
+    if(_l==l&&_r==r)
+    {
+        lazy[node]+=num;
+        tree[node]+=num*(_r-_l+1);
+        return;
+    }
+    else if(l==r)return;
+    int mid=(l+r)>>1;
+    pushdown(l,r,node);
+    if(_r<=mid)update(l,mid,node<<1,_l,_r,num);
+    else if(_l>mid)update(mid+1,r,node<<1|1,_l,_r,num);
+    else
+    {
+        update(l,mid,node<<1,_l,mid,num);
+        update(mid+1,r,node<<1|1,mid+1,_r,num);
+    }
+    tree[node]=tree[node<<1]+tree[node<<1|1];
+}
+long long query(int l,int r,int node,int _l,int _r)
+{
+    if(l!=r)pushdown(l,r,node);
+    int mid=(l+r)>>1;
+    if(_l>r||_r<l)return 0;
+    else if(_l<=l&&_r>=r)return tree[node];
+    else return query(l,mid,node<<1,_l,_r)+query(mid+1,r,node<<1|1,_l,_r);
+}

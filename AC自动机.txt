@@ -1,0 +1,57 @@
+struct node{
+    node *fail,*s[27];
+    int w;
+}*head;
+char temp[51],str[1000001];
+node *getfail(node *p,int k){
+    if (p->s[k]!=NULL) return p->s[k];
+    else if(p==head) return head;
+    else return getfail(p->fail,k);
+}
+void build_trie(){
+    node *root=head;
+    node *tep;
+    for (int i=0;i<strlen(temp);i++){
+        if(root->s[temp[i]-'a']==NULL){
+            tep=new node;
+            for (int k=0;k<26;k++)tep->s[k]=NULL;
+            tep->w=0;
+            tep->fail=head;
+            root->s[temp[i]-'a']=tep;
+        }
+        root=root->s[temp[i]-'a'];
+        if (i==strlen(temp)-1) root->w+=1;
+    }
+}
+void build_ac(){
+    node *root;
+    queue<node*> q;
+    while (!q.empty())q.pop();
+    q.push(head);
+    while (!q.empty()){
+        root=q.front();
+        q.pop();
+        for(int i=0;i<26;i++)if(root->s[i]!=NULL){
+            q.push(root->s[i]);
+            if(root==head)root->s[i]->fail=head;
+            else root->s[i]->fail=getfail(root->fail,i);
+        }
+    }
+}
+int find(){
+    int ans=0;
+    int len=strlen(str);
+    node* tep;
+    node* root=head;
+    for(int i=0;i<len;i++){
+        while (root->s[str[i]-'a']==NULL&&root!=head)root=root->fail;
+        root=(root->s[str[i]-'a']==NULL)?head:root->s[str[i]-'a'];
+        tep=root;
+        while(tep!=head){
+            ans+=tep->w;
+            tep->w=0;
+            tep=tep->fail;
+        }
+    }
+    return ans;
+}
