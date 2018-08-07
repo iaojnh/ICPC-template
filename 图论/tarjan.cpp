@@ -17,6 +17,17 @@ void tarjan(int a,int fa)
         {
             tarjan(point,a);
             low[a]=min(low[a],low[point]);
+            /*if(low[point]>=dfn[a]) {
+                block.clear();
+                int t;
+                do {
+                    t=s.top();
+                    block.pb(t);
+                    s.pop();
+                }while(t!=point);
+                block.pb(a);
+                solve();
+            }*/
         }
         else if(instack[point])low[a]=min(low[a],dfn[point]);
     }
