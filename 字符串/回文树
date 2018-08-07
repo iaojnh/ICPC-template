@@ -3,7 +3,7 @@ namespace Palindromic_Tree
 	static const int M=27,N=::N;
 	char s[N];
 	int size[N],len;
-    struct Node {
+	struct Node {
         int son[M];
         int ff,len;
     }t[N];
