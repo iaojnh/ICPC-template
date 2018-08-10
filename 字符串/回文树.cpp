@@ -1,23 +1,24 @@
-namespace Palindromic_Tree
+const int N = 1e6 + 7;
+char s[N];
+int n;//length of s
+struct Palindromic_Tree
 {
-	static const int M=27,N=::N;
-	char s[N];
+	static const int M=27,N=::N+2;
 	int size[N],len;
 	struct Node {
 		int son[M];
 		int ff,len;
 	}t[N];
 	int last,tot;
-	void init(char *a) {
+	void init() {
 	    last=0,tot=1;
-	    len=strlen(a);
-	    rep(i,0,len+1)s[i]=a[i];
+	    len=n;
 	    memset(t,0,sizeof(Node)*(len+5));
 	    memset(size,0,sizeof(int)*(len+5));
 	    t[tot++].len=-1;
 	    t[0].ff=t[1].ff=1;
 	}
-	void build() {
+	void build(char *s) {
 		rep(i,0,len) {
 			int c=s[i]-'a';
 			int p=last;
@@ -32,4 +33,5 @@ namespace Palindromic_Tree
 			last=t[p].son[c];
 			size[t[p].son[c]]++;
 		}
+	}
 };
