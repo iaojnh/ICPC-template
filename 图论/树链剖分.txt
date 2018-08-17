@@ -57,6 +57,7 @@ void pushdown(int l,int r,int node)
 }   
 void update(int l,int r,int node,int ll,int rr,__int64 num)
 {
+    if(ll>rr)swap(ll,rr);
     if(ll==l&&rr==r)
     {
         lazy[node]+=num;
