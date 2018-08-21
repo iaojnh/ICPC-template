@@ -1,11 +1,17 @@
-int p[N];
-void manacher(int n, char a[]) { // 1 ~ n, #a#b#d#a#
-	int id, mx = 0;
-	for (int i = 1; i <= n; ++i) {
-		p[i] = (mx > i ? min(mx - i, p[2 * id - i]) : 1);
-		while (i - p[i] >= 0 && i + p[i] <= n && a[i - p[i]] == a[i + p[i]])
-			++p[i];
-		if (i + p[i] > mx)
-			id = i, mx = i + p[i];
-	}
+// str[1..n]
+// f[i*2] = len of maxpal center at str[i]
+// f[i*2+1] = len of maxpal center at str[i+0.5]
+int f[N*2];
+void manacher(char* str,int n){
+    static char s[N*2];
+    rep(i,0,n+1) s[i*2]=str[i], s[i*2+1]='#';
+    s[0]='!'; s[2*n+2]='?';
+    int a=0,p=0;   
+    rep(i,1,2*n+2){
+        int h=0;
+        if(i<=a+p)h=min(f[2*a-i],a+p-i);
+        while(s[i+h+1]==s[i-h-1])h++;
+        f[i]=h;
+        if(i+h>a+p)a=i,p=h;
+    }
 }
