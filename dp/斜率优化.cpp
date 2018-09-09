@@ -5,7 +5,7 @@
   * dp[i]=dp[j]+sum[i]^2+sum[j]^2-2*sum[i]*sum[j] -> dp[j]+sum[j]^2=dp[i]-sum[i]^2+2*sum[i]*sum[j]
   * 对于直线y=kx+b
   * 将只与j相关的变量做y，只与i相关的变量做b，与两者都相关的做kx，k与i相关，x与j相关。
-  * 这个例子中，令y=dp[j]+sum[j],k=2*sum[i],x=sum[j],b=dp[i]-sum[i]^2，斜率固定且已知，我们的目的是让这条直线的截距尽可能大。
+  * 这个例子中，令y=dp[j]+sum[j]^2,k=2*sum[i],x=sum[j],b=dp[i]-sum[i]^2，斜率固定且已知，我们的目的是让这条直线的截距尽可能大。
   * 于是我们对于之前的点，用单调队列维护一个上凸壳即可。就可以O(1)转移了。
 */
 #include<bits/stdc++.h>
